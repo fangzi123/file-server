@@ -15,11 +15,12 @@
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
 
         <!--自定义包版本-->
-        <wd-dependencies.version>1.0.0</wd-dependencies.version>
-        <common-dependencies.version>1.0.0</common-dependencies.version>
+        <wd-dependencies.version>1.0.0-SNAPSHOT</wd-dependencies.version>
+        <common-dependencies.version>1.0.0-SNAPSHOT</common-dependencies.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -141,9 +142,9 @@
     </build>
     <repositories>
         <repository>
-            <id>nexus</id>
+            <id>central</id>
             <name>Nexus</name>
-            <url>http://192.168.9.7:8081/repository/maven-public/</url>
+            <url>http://192.168.6.1/nexus/content/groups/public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -154,9 +155,9 @@
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>nexus</id>
+            <id>central</id>
             <name>Nexus</name>
-            <url>http://192.168.9.7:8081/repository/maven-public/</url>
+            <url>http://192.168.6.1/nexus/content/groups/public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -169,11 +170,11 @@
     <distributionManagement>
         <repository>
             <id>releases</id>
-            <url>http://192.168.9.7:8081/repository/maven-releases/</url>
+            <url>http://192.168.6.1/nexus/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://192.168.9.7:8081/repository/maven-snapshots/</url>
+            <url>http://192.168.6.1/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
