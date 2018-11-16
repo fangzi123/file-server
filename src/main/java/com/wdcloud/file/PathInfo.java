@@ -1,5 +1,6 @@
 package com.wdcloud.file;
 
+import com.github.tobato.fastdfs.domain.StorePath;
 import lombok.Data;
 
 @Data
@@ -12,12 +13,9 @@ public class PathInfo {
     public static final String SEPARATOR = "/";
 
     public PathInfo invoke() {
-        if (filePath.startsWith(SEPARATOR)) {
-            filePath = filePath.replaceFirst(SEPARATOR, "");
-        }
-        final int index = filePath.indexOf(SEPARATOR);
-        group = filePath.substring(0, index);
-        path = filePath.substring(index).replaceFirst(SEPARATOR, "");
+        final StorePath path = StorePath.praseFromUrl(filePath);
+        this.group = path.getGroup();
+        this.path = path.getPath();
         return this;
     }
 }
