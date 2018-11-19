@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wdcloud.model.mapper.FileInfoMapper">
+  <resultMap id="BaseResultMap" type="com.wdcloud.model.entities.FileInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="origin_name" jdbcType="VARCHAR" property="originName" />
+    <result column="file_size" jdbcType="BIGINT" property="fileSize" />
+    <result column="file_type" jdbcType="VARCHAR" property="fileType" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="convert_need" jdbcType="INTEGER" property="convertNeed" />
+    <result column="convert_status" jdbcType="INTEGER" property="convertStatus" />
+    <result column="convert_type" jdbcType="VARCHAR" property="convertType" />
+    <result column="convert_count" jdbcType="INTEGER" property="convertCount" />
+    <result column="convert_time" jdbcType="TIMESTAMP" property="convertTime" />
+    <result column="convert_result" jdbcType="VARCHAR" property="convertResult" />
+    <result column="convert_error_msg" jdbcType="VARCHAR" property="convertErrorMsg" />
+  </resultMap>
+</mapper>
