@@ -32,8 +32,6 @@ public class ConverterReceiver {
     private FastFileStorageClient storageClient;
     @Autowired
     private FileInfoDao fileInfoDao;
-    @Autowired
-    private CleanTmpFileTask cleanTmpFileTask;
 
     @RabbitListener(queues = MqConstants.QUEUE_OSS_CONVERT)
     public void process(ConvertMQO mqo) {
