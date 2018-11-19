@@ -1,8 +1,0 @@
-###
-GET localhost:8010/mq/queue
-###
-GET localhost:8099/mq/topic
-###
-GET localhost:8099/mq/topic2
-###
-GET localhost:8099/mq/fanout
