@@ -110,7 +110,4 @@ public class ConverterReceiver {
             log.error("{} retry is {} count", one.getFileId(), one.getConvertCount());
         }
     }
-
-    public static void main(String[] args) {
-    }
 }
