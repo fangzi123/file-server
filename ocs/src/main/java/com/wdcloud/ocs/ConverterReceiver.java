@@ -2,7 +2,6 @@ package com.wdcloud.ocs;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.IdUtil;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.proto.storage.DownloadFileWriter;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -18,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Date;
 
 @SuppressWarnings({"SpringJavaInjectionPointsAutowiringInspection", "SpringJavaAutowiredFieldsWarningInspection"})
 @Slf4j
@@ -45,8 +42,8 @@ public class ConverterReceiver {
         ConvertModel convertModel = new ConvertModel();
         convertModel.setFileId(mqo.getFileId());
         BeanUtil.copyProperties(storePath, convertModel);
-        final FileInfo one = fileInfoDao.findOne(FileInfo.builder().fileId(convertModel.getFileId()).build());
-        if (one == null) {
+        final FileInfo fileInfo = fileInfoDao.findOne(FileInfo.builder().fileId(convertModel.getFileId()).build());
+        if (fileInfo == null) {
             log.error("文件不存在");
             return;
         }
@@ -57,39 +54,19 @@ public class ConverterReceiver {
         } catch (Exception e) {
             //文件下载异常
             log.error(Throwables.getStackTraceAsString(e));
-            retry(one, e);
-        }
-        File targetFile = null;
-        try {
-            targetFile = File.createTempFile(IdUtil.simpleUUID(), "." + handler.targetExtName());
-        } catch (Exception e) {
-            //创建临时目录失败
-            log.error(Throwables.getStackTraceAsString(e));
-            retry(one, e);
-        }
-        if (srcFile == null || targetFile == null) {
-            return;
+            retry(fileInfo, e);
         }
         //保存转换信息
+        if (srcFile == null) {
+            return;
+        }
         try {
-            handler.convert(srcFile, targetFile, convertModel);
-            final StorePath slaveFile = storageClient.uploadSlaveFile(convertModel.getGroup(),
-                    convertModel.getPath(),
-                    new FileInputStream(targetFile),
-                    targetFile.length(),
-                    "_" + handler.targetExtName(),
-                    "." + handler.targetExtName());
-            one.setConvertStatus(1);//成功
-            one.setConvertTime(new Date());
-            one.setConvertType(handler.targetExtName());
-            one.setConvertResult(slaveFile.getFullPath());
-            fileInfoDao.update(one);
+            handler.convert(srcFile, convertModel, fileInfo);
         } catch (Exception e) {
-            retry(one, e);
+            retry(fileInfo, e);
         } finally {
             try {
                 FileUtils.forceDelete(srcFile);
-                FileUtils.forceDelete(targetFile);
             } catch (IOException e) {
                 //
             }

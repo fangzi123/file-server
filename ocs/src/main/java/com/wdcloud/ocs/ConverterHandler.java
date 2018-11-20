@@ -1,5 +1,7 @@
 package com.wdcloud.ocs;
 
+import com.wdcloud.model.entities.FileInfo;
+
 import java.io.File;
 
 /**
@@ -13,7 +15,7 @@ public interface ConverterHandler {
      * @param srcFile      the src file
      * @param convertModel convertModel
      */
-    void convert(File srcFile, File targetFile, ConvertModel convertModel) throws Exception;
+    void convert(File srcFile, ConvertModel convertModel, FileInfo fileInfo) throws Exception;
 
     /**
      * 支持的类别 e.g.: jpg
