@@ -1,6 +1,7 @@
 package com.wdcloud.oss;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.wdcloud.model.ConvertMQO;
@@ -10,11 +11,14 @@ import com.wdcloud.utils.HmacSHA1Utils;
 import com.wdcloud.utils.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.HmacAlgorithms;
+import org.apache.commons.codec.digest.HmacUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.crypto.Mac;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -61,7 +65,7 @@ public class FileController {
         ConvertMQO mqo = new ConvertMQO();
         mqo.setFileId(storePath.getFullPath());
         convertSender.send(mqo);
-        return ResponseDTO.success(storePath);
+        return ResponseDTO.success(fileInfo);
     }
 
     /**
@@ -80,10 +84,10 @@ public class FileController {
 //    @RequestMapping(value = "/download", method = RequestMethod.GET)
 //    public void download(@RequestParam("token") String token, HttpServletResponse response) {
 //        //文件名
-//        final PathInfo pathInfo = validateToken(token).invoke();
+//        final Parm pathInfo = validateToken(token).invoke();
 //
 //        final String fileName = pathInfo.getName() == null ?
-//                pathInfo.getPath().substring(pathInfo.getPath().lastIndexOf(PathInfo.SEPARATOR) + 1) :
+//                pathInfo.getPath().substring(pathInfo.getPath().lastIndexOf(Parm.SEPARATOR) + 1) :
 //                pathInfo.getName();
 //        response.setContentType("application/force-download");
 //        response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileName, Charset.forName("utf-8")));
@@ -96,8 +100,8 @@ public class FileController {
      */
     @RequestMapping(value = "/fileInfo", method = RequestMethod.GET)
     public ResponseDTO fileInfo(@RequestParam("token") String token) {
-        final PathInfo pathInfo = validateToken(token).invoke();
-        final FileInfo one = fileInfoDao.findOne(FileInfo.builder().fileId(pathInfo.getFilePath()).build());
+        final Parm parm = validateToken(token);
+        final FileInfo one = fileInfoDao.findOne(FileInfo.builder().fileId(parm.getFileId()).build());
         return ResponseDTO.success(one);
     }
 
@@ -107,14 +111,15 @@ public class FileController {
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseDTO delete(@RequestParam("token") String token) {
-        final PathInfo pathInfo = validateToken(token).invoke();
-        storageClient.deleteFile(pathInfo.getGroup(), pathInfo.getPath());
+        final Parm parm = validateToken(token);
+        final StorePath storePath = StorePath.praseFromUrl(parm.getFileId());
+        storageClient.deleteFile(storePath.getGroup(), storePath.getPath());
         //从文件删除
         return ResponseDTO.success();
     }
 
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        /**
 //         * 签名基本原理是通过 key/secret 的实现：
 //         * 1, 服务器负责为每个客户端生成一对 key/secret （ key/secret 没有任何关系，不能相互推算），保存，并告知客户端。
@@ -126,25 +131,25 @@ public class FileController {
 //        //	AccessKey/SecretKey
 //        //key : 12b517e983a945089243a177f2097a1d
 //        //secret : be5b60e5483d43da8dd550ab3dbccc74
-//        String secretId = "12b517e983a945089243a177f2097a1d";
-//        String secretKey = "be5b60e5483d43da8dd550ab3dbccc74";
+        String secretId = "12b517e983a945089243a177f2097a1d";
+        String secretKey = "be5b60e5483d43da8dd550ab3dbccc74";
 //
 ////        encodedPutPolicy
-//        JSONObject jo = new JSONObject();
-//        jo.put("timestamp", 1451491200);
-//        jo.put("version", 1);
-//        jo.put("filePath", "group1/M00/00/00/wKgFFFvhWxaAI9DGAAAkNqJrSgQ994.png");
-//        final String encodedPutPolicy = Base64.encodeBase64URLSafeString(jo.toJSONString().getBytes(StandardCharsets.UTF_8));
-//        final String sign = genHmacSHA1(encodedPutPolicy, secretKey);
-//        System.out.println(secretId + "." + sign + "." + encodedPutPolicy);
+        JSONObject jo = new JSONObject();
+        jo.put("timestamp", 1451491200);
+        jo.put("version", 1);
+        jo.put("fileId", "group1/M00/00/00/wKgFFFvhWxaAI9DGAAAkNqJrSgQ994.png");
+        final String encodedPutPolicy = Base64.encodeBase64URLSafeString(jo.toJSONString().getBytes(StandardCharsets.UTF_8));
+        final String sign = HmacSHA1Utils.genHmacSHA1WithEncodeBase64URLSafe(encodedPutPolicy, secretKey);
+        System.out.println(secretId + "." + sign + "." + encodedPutPolicy);
 //
-//    }
+    }
 
-    private PathInfo validateToken(String token) {
+    private Parm validateToken(String token) {
         return validateToken(token, true);
     }
 
-    private PathInfo validateToken(String token, boolean isParse) {
+    private Parm validateToken(String token, boolean isParse) {
         final String[] tokens = token.split("\\.");
         if (tokens.length != 3) {
             throw new RuntimeException("invalid token");
@@ -155,6 +160,6 @@ public class FileController {
         if (!tokens[1].equals(sign)) {
             throw new RuntimeException("invalid token");
         }
-        return isParse ? JSON.parseObject(new String(Base64.decodeBase64(data), StandardCharsets.UTF_8), PathInfo.class) : null;
+        return isParse ? JSON.parseObject(new String(Base64.decodeBase64(data), StandardCharsets.UTF_8), Parm.class) : null;
     }
 }
