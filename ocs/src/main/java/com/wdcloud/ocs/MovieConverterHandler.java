@@ -1,6 +1,5 @@
 package com.wdcloud.ocs;
 
-import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.google.common.collect.Maps;
@@ -15,6 +14,7 @@ import java.io.FileInputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Slf4j
@@ -33,7 +33,7 @@ public class MovieConverterHandler extends AbstractConverterHandler {
     public void convert(File srcFile, ConvertModel convertModel, FileInfo fileInfo) throws Exception {
         Map<String, String> map = Maps.newHashMap();
         //视频转换
-        String targetFilePath = IdUtil.simpleUUID() + ".mp4";
+        String targetFilePath = UUID.randomUUID().toString() + ".mp4";
         ffmpegOperations.movie2Mp4(srcFile.getPath(), targetFilePath);
         final File fileMp4 = new File(targetFilePath);
         final StorePath mp4 = storageClient.uploadSlaveFile(convertModel.getGroup(),
@@ -42,7 +42,7 @@ public class MovieConverterHandler extends AbstractConverterHandler {
         FileUtils.forceDelete(fileMp4);
         MovieInfo movieInfo = ffmpegOperations.getMovieProperty(srcFile.getPath());
         //截图
-        targetFilePath = IdUtil.simpleUUID() + ".png";
+        targetFilePath = UUID.randomUUID().toString() + ".png";
         ffmpegOperations.movie2thumbnail(srcFile.getPath(), movieInfo.getResolution(), targetFilePath);
         final File fileThumbnail = new File(targetFilePath);
         final StorePath thumbnail = storageClient.uploadSlaveFile(convertModel.getGroup(),

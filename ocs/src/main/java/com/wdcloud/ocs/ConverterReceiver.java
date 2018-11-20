@@ -1,7 +1,5 @@
 package com.wdcloud.ocs;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.io.FileUtil;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.proto.storage.DownloadFileWriter;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -11,9 +9,9 @@ import com.wdcloud.model.entities.FileInfo;
 import com.wdcloud.mq.model.ConvertMQO;
 import com.wdcloud.mq.model.ConvertResultMQO;
 import com.wdcloud.mq.model.MqConstants;
+import com.wdcloud.utils.BeanUtil;
+import com.wdcloud.utils.file.FileUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,9 +36,10 @@ public class ConverterReceiver {
     @RabbitListener(queues = MqConstants.QUEUE_OSS_CONVERT)
     public void process(ConvertMQO mqo) {
         log.info("converter invoke");
-        final ConverterHandler handler = converterHandlerFactory.bySuffixName(FileUtil.extName(mqo.getFileId()));
+
+        final ConverterHandler handler = converterHandlerFactory.bySuffixName(FileUtils.getFileSuffix(mqo.getFileId()));
         if (handler == null) {
-            log.warn("没有对应的处理器,{},{}", mqo.getFileId(), FileUtil.extName(mqo.getFileId()));
+            log.warn("没有对应的处理器,{},{}", mqo.getFileId(), FileUtils.getFileSuffix(mqo.getFileId()));
             return;
         }
         final StorePath storePath = StorePath.praseFromUrl(mqo.getFileId());
@@ -71,7 +70,7 @@ public class ConverterReceiver {
             retry(fileInfo, e);
         } finally {
             try {
-                FileUtils.forceDelete(srcFile);
+                org.apache.commons.io.FileUtils.forceDelete(srcFile);
             } catch (IOException e) {
                 //
             }
@@ -80,7 +79,7 @@ public class ConverterReceiver {
 
         //TODO 区分发到哪里 可扩展
         ConvertResultMQO resultMQO = new ConvertResultMQO();
-        BeanUtil.copyProperties(fileInfo,resultMQO);
+        BeanUtil.copyProperties(fileInfo, resultMQO);
         convertResultSender.send(resultMQO);
     }
 

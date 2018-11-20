@@ -1,6 +1,5 @@
 package com.wdcloud.ocs;
 
-import cn.hutool.core.util.IdUtil;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.wdcloud.model.entities.FileInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
 @Slf4j
@@ -28,7 +28,7 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
 
     @Override
     public void convert(File srcFile, ConvertModel convertModel, FileInfo fileInfo) throws Exception {
-        File targetFile = File.createTempFile(IdUtil.simpleUUID(), "." + this.targetExtName());
+        File targetFile = File.createTempFile(UUID.randomUUID().toString(), "." + this.targetExtName());
         try {
             documentConverter.convert(srcFile).to(targetFile).execute();
             final StorePath slaveFile = storageClient.uploadSlaveFile(convertModel.getGroup(),
