@@ -1,6 +1,5 @@
 package com.wdcloud.oss;
 
-import com.wdcloud.model.MqConstants;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;

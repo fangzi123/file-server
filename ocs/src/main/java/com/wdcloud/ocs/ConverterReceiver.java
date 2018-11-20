@@ -6,8 +6,6 @@ import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.proto.storage.DownloadFileWriter;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.google.common.base.Throwables;
-import com.wdcloud.model.ConvertMQO;
-import com.wdcloud.model.MqConstants;
 import com.wdcloud.model.dao.FileInfoDao;
 import com.wdcloud.model.entities.FileInfo;
 import lombok.extern.slf4j.Slf4j;

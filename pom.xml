@@ -6,7 +6,7 @@
 
     <groupId>com.wdcloud</groupId>
     <artifactId>file-server</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>oss</module>
         <module>ocs</module>
@@ -24,8 +24,8 @@
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
 
         <!--自定义包版本-->
-        <wd-dependencies.version>1.0.0-SNAPSHOT</wd-dependencies.version>
-        <common-dependencies.version>1.0.0-SNAPSHOT</common-dependencies.version>
+        <wd-dependencies.version>1.0.0</wd-dependencies.version>
+        <common-dependencies.version>1.0.0</common-dependencies.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -53,6 +53,10 @@
         <dependency>
             <groupId>com.wdcloud</groupId>
             <artifactId>common-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.wdcloud</groupId>
+            <artifactId>common-mq-model</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.tobato</groupId>
