@@ -20,7 +20,7 @@
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <!--<maven.compiler.release>${java.version}</maven.compiler.release>-->
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven.compiler.compilerVersion>${java.version}</maven.compiler.compilerVersion>
 
         <!--自定义包版本-->
