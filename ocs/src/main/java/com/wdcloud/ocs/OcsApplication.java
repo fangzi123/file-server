@@ -5,9 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.context.annotation.Import;
 import org.springframework.jmx.support.RegistrationPolicy;
+
+import javax.servlet.MultipartConfigElement;
 
 @Slf4j
 @SpringBootApplication
@@ -22,5 +26,11 @@ public class OcsApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("{} is started", this.getClass().getSimpleName());
+    }
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setLocation("/tmp");
+        return factory.createMultipartConfig();
     }
 }

@@ -9,11 +9,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.jmx.support.RegistrationPolicy;
+
+import javax.servlet.MultipartConfigElement;
 
 @Slf4j
 @SpringBootApplication
@@ -36,6 +39,12 @@ public class OssApplication implements CommandLineRunner {
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
         fasHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
         return new HttpMessageConverters((HttpMessageConverter<?>) fasHttpMessageConverter);
+    }
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setLocation("/tmp");
+        return factory.createMultipartConfig();
     }
 
 }

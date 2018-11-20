@@ -1,4 +1,4 @@
-package com.wdcloud.oss;
+package com.wdcloud.ocs;
 
 import com.wdcloud.mq.model.MqConstants;
 import org.springframework.amqp.core.Binding;
@@ -13,12 +13,12 @@ public class MqConfig {
 
     @Bean
     Queue queue() {
-        return new Queue(MqConstants.QUEUE_OSS_CONVERT);
+        return new Queue(MqConstants.QUEUE_LMS_CONVERT_RESULT);
     }
 
     @Bean
     TopicExchange topicExchange() {
-        return new TopicExchange(MqConstants.TOPIC_EXCHANGE_OSS_CONVERT);
+        return new TopicExchange(MqConstants.TOPIC_EXCHANGE_LMS);
     }
 
     @Bean

@@ -44,11 +44,11 @@ public class MovieConverterHandler extends AbstractConverterHandler {
         //截图
         targetFilePath = IdUtil.simpleUUID() + ".png";
         ffmpegOperations.movie2thumbnail(srcFile.getPath(), movieInfo.getResolution(), targetFilePath);
-        final File fileThumbail = new File(targetFilePath);
-        final StorePath thumbail = storageClient.uploadSlaveFile(convertModel.getGroup(),
-                convertModel.getPath(), new FileInputStream(fileThumbail), fileThumbail.length(), "_thumbail", ".png");
-        map.put("thumbnail", thumbail.getFullPath());
-        FileUtils.forceDelete(fileThumbail);
+        final File fileThumbnail = new File(targetFilePath);
+        final StorePath thumbnail = storageClient.uploadSlaveFile(convertModel.getGroup(),
+                convertModel.getPath(), new FileInputStream(fileThumbnail), fileThumbnail.length(), "_thumbail", ".png");
+        map.put("thumbnail", thumbnail.getFullPath());
+        FileUtils.forceDelete(fileThumbnail);
         //缩略图
         fileInfo.setConvertStatus(1);//成功
         fileInfo.setConvertTime(new Date());

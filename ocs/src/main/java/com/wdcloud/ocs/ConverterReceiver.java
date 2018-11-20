@@ -8,8 +8,12 @@ import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.google.common.base.Throwables;
 import com.wdcloud.model.dao.FileInfoDao;
 import com.wdcloud.model.entities.FileInfo;
+import com.wdcloud.mq.model.ConvertMQO;
+import com.wdcloud.mq.model.ConvertResultMQO;
+import com.wdcloud.mq.model.MqConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +31,9 @@ public class ConverterReceiver {
     private FastFileStorageClient storageClient;
     @Autowired
     private FileInfoDao fileInfoDao;
+
+    @Autowired
+    private ConvertResultSender convertResultSender;
 
     @RabbitListener(queues = MqConstants.QUEUE_OSS_CONVERT)
     public void process(ConvertMQO mqo) {
@@ -71,6 +78,10 @@ public class ConverterReceiver {
             log.info("converter end");
         }
 
+        //TODO 区分发到哪里 可扩展
+        ConvertResultMQO resultMQO = new ConvertResultMQO();
+        BeanUtil.copyProperties(fileInfo,resultMQO);
+        convertResultSender.send(resultMQO);
     }
 
     private void retry(FileInfo one, Exception e) {
