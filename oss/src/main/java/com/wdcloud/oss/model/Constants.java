@@ -1,4 +1,4 @@
-package com.wdcloud.oss;
+package com.wdcloud.oss.model;
 
 import java.util.HashMap;
 import java.util.Map;

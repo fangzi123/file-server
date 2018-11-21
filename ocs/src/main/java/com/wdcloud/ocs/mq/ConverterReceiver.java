@@ -1,4 +1,4 @@
-package com.wdcloud.ocs;
+package com.wdcloud.ocs.mq;
 
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.proto.storage.DownloadFileWriter;
@@ -9,6 +9,8 @@ import com.wdcloud.model.entities.FileInfo;
 import com.wdcloud.mq.model.ConvertMQO;
 import com.wdcloud.mq.model.ConvertResultMQO;
 import com.wdcloud.mq.model.MqConstants;
+import com.wdcloud.ocs.handler.ConverterHandler;
+import com.wdcloud.ocs.handler.ConverterHandlerFactory;
 import com.wdcloud.utils.BeanUtil;
 import com.wdcloud.utils.file.FileUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -4,12 +4,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.github.tobato.fastdfs.FdfsClientConfig;
-import com.wdcloud.mq.model.MqConstants;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -41,23 +36,6 @@ public class OssApplication implements CommandLineRunner {
     }
 
     @Bean
-    public Queue queue() {
-        return new Queue(MqConstants.QUEUE_OSS_CONVERT);
-    }
-
-    @Bean
-    public TopicExchange topicExchange() {
-        return new TopicExchange(MqConstants.TOPIC_EXCHANGE_OSS_CONVERT);
-    }
-
-    @Bean
-    public Binding bindingExchangeOssConvert(Queue queue, TopicExchange topicExchange) {
-        return BindingBuilder
-                .bind(queue)
-                .to(topicExchange)
-                .with(MqConstants.QUEUE_OSS_CONVERT);
-    }
-    @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters() {
         FastJsonHttpMessageConverter fasHttpMessageConverter = new FastJsonHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
@@ -65,6 +43,7 @@ public class OssApplication implements CommandLineRunner {
         fasHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
         return new HttpMessageConverters((HttpMessageConverter<?>) fasHttpMessageConverter);
     }
+
     @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();

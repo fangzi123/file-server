@@ -1,4 +1,4 @@
-package com.wdcloud.ocs;
+package com.wdcloud.ocs.handler;
 
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.wdcloud.model.dao.FileInfoDao;

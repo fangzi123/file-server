@@ -1,4 +1,4 @@
-package com.wdcloud.oss;
+package com.wdcloud.oss.api;
 
 import com.alibaba.fastjson.JSON;
 import com.github.tobato.fastdfs.domain.StorePath;
@@ -6,6 +6,9 @@ import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.wdcloud.model.dao.FileInfoDao;
 import com.wdcloud.model.entities.FileInfo;
 import com.wdcloud.mq.model.ConvertMQO;
+import com.wdcloud.oss.model.Constants;
+import com.wdcloud.oss.model.Parm;
+import com.wdcloud.oss.mq.ConvertSender;
 import com.wdcloud.utils.HmacSHA1Utils;
 import com.wdcloud.utils.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,7 @@
-package com.wdcloud.ocs;
+package com.wdcloud.ocs.handler;
 
 import com.wdcloud.model.entities.FileInfo;
+import com.wdcloud.ocs.mq.ConvertModel;
 
 import java.io.File;
 

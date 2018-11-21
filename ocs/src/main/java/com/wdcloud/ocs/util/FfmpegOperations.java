@@ -1,4 +1,4 @@
-package com.wdcloud.ocs;
+package com.wdcloud.ocs.util;
 
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;

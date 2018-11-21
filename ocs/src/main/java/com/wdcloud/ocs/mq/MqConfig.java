@@ -1,4 +1,4 @@
-package com.wdcloud.ocs;
+package com.wdcloud.ocs.mq;
 
 import com.wdcloud.mq.model.MqConstants;
 import org.springframework.amqp.core.Binding;

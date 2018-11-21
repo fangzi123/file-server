@@ -1,7 +1,8 @@
-package com.wdcloud.ocs;
+package com.wdcloud.ocs.handler;
 
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.wdcloud.model.entities.FileInfo;
+import com.wdcloud.ocs.mq.ConvertModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.jodconverter.DocumentConverter;

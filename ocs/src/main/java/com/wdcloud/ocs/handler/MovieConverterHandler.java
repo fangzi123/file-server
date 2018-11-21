@@ -1,9 +1,12 @@
-package com.wdcloud.ocs;
+package com.wdcloud.ocs.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.google.common.collect.Maps;
 import com.wdcloud.model.entities.FileInfo;
+import com.wdcloud.ocs.mq.ConvertModel;
+import com.wdcloud.ocs.util.FfmpegOperations;
+import com.wdcloud.ocs.util.MovieInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;

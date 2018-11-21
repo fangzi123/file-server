@@ -1,4 +1,4 @@
-package com.wdcloud.oss;
+package com.wdcloud.oss.api;
 
 import com.google.common.base.Throwables;
 import com.wdcloud.utils.ResponseDTO;
