@@ -26,7 +26,7 @@ public class MqConfig {
         return BindingBuilder
                 .bind(queue)
                 .to(topicExchange)
-                .with(MqConstants.QUEUE_OSS_CONVERT);
+                .with(MqConstants.QUEUE_LMS_CONVERT_RESULT);
     }
 
 }

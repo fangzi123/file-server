@@ -68,14 +68,13 @@ public class ConverterReceiver {
             handler.convert(srcFile, convertModel, fileInfo);
         } catch (Exception e) {
             retry(fileInfo, e);
-        } finally {
-            try {
-                org.apache.commons.io.FileUtils.forceDelete(srcFile);
-            } catch (IOException e) {
-                //
-            }
-            log.info("converter end");
         }
+        try {
+            org.apache.commons.io.FileUtils.forceDelete(srcFile);
+        } catch (IOException e) {
+            //
+        }
+        log.info("converter end");
 
         //TODO 区分发到哪里 可扩展
         ConvertResultMQO resultMQO = new ConvertResultMQO();
@@ -84,7 +83,7 @@ public class ConverterReceiver {
     }
 
     private void retry(FileInfo one, Exception e) {
-        if (one.getConvertCount() <= 3) {
+        if (one.getConvertCount() < 3) {
             one.setConvertStatus(-1);//失败
             one.setConvertErrorMsg(e.getMessage());
             one.setConvertCount(one.getConvertCount() + 1);

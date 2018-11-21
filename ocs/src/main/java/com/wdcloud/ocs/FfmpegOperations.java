@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,6 +64,8 @@ public class FfmpegOperations {
     public void movie2Mp4(String input, String output) throws Exception {
         List<String> command = new ArrayList<String>();
         command.add(ffmpegHome); // 添加转换工具路径
+        command.add("-loglevel"); // 设定命令日志级别
+        command.add("error"); // 设定命令日志级别
         command.add("-y"); // 添加参数＂-y＂，该参数指定将覆盖已存在的文件
         command.add("-i"); // 添加参数＂-i＂，该参数指定要转换的文件
         command.add(input); // 添加要转换格式的视频文件的路径
@@ -78,15 +79,14 @@ public class FfmpegOperations {
         command.add("comment=\"wdcloud.video\"");
         command.add("-x264opts"); // 设置x264编码属性，关键帧设置
         command.add("keyint=250:min-keyint=25");
-        command.add("-loglevel"); // 设定命令日志级别
-        command.add("error"); // 设定命令日志级别
+
         command.add("-preset"); // 设置帧频
         command.add("superfast"); // 设置帧频
         command.add("-r"); // 设置帧频
         command.add("25"); // 设置帧频
         command.add("-f"); // 输出文件格式
         command.add("mp4"); // 输出文件格式
-        command.add("-movflags"); // 将元信息从文件尾部移到头部
+        command.add("-movflags"); // 将元信息从文件尾部移到头部,播放加速优化
         command.add("faststart");
         command.add(output);
         exec(command);
@@ -95,16 +95,16 @@ public class FfmpegOperations {
     public void movie2thumbnail(String input, String widthxheight, String output) throws Exception {
         List<String> command = new ArrayList<String>();
         command.add(ffmpegHome); // 添加转换工具路径
+        command.add("-loglevel"); // 设定命令日志级别
+        command.add("error"); // 设定命令日志级别
         command.add("-y"); // 添加参数＂-y＂，该参数指定将覆盖已存在的文件
-        command.add("-ss"); // 开始时间
-        command.add("00:00:00"); // 开始时间
         command.add("-t"); // 截取1毫秒
         command.add("0.001"); // 截取1毫秒
         command.add("-i"); // 添加参数＂-i＂，该参数指定要转换的文件
         command.add(input); // 添加要转换格式的视频文件的路径
         command.add("-f"); // 输出文件格式
         command.add("image2"); // 输出文件格式
-        command.add("-s"); // 将元信息从文件尾部移到头部
+        command.add("-s");
         command.add(widthxheight);
         command.add(output);
         exec(command);

@@ -1,7 +1,6 @@
 package com.wdcloud.oss;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.wdcloud.model.dao.FileInfoDao;
@@ -116,7 +115,7 @@ public class FileController {
     }
 
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        /**
 //         * 签名基本原理是通过 key/secret 的实现：
 //         * 1, 服务器负责为每个客户端生成一对 key/secret （ key/secret 没有任何关系，不能相互推算），保存，并告知客户端。
@@ -128,19 +127,18 @@ public class FileController {
 //        //	AccessKey/SecretKey
 //        //key : 12b517e983a945089243a177f2097a1d
 //        //secret : be5b60e5483d43da8dd550ab3dbccc74
-        String secretId = "12b517e983a945089243a177f2097a1d";
-        String secretKey = "be5b60e5483d43da8dd550ab3dbccc74";
+//        String secretId = "12b517e983a945089243a177f2097a1d";
+//        String secretKey = "be5b60e5483d43da8dd550ab3dbccc74";
 //
 ////        encodedPutPolicy
-        JSONObject jo = new JSONObject();
-        jo.put("timestamp", 1451491200);
-        jo.put("version", 1);
-        jo.put("fileId", "group1/M00/00/00/wKgFFFvhWxaAI9DGAAAkNqJrSgQ994.png");
-        final String encodedPutPolicy = Base64.encodeBase64URLSafeString(jo.toJSONString().getBytes(StandardCharsets.UTF_8));
-        final String sign = HmacSHA1Utils.genHmacSHA1WithEncodeBase64URLSafe(encodedPutPolicy, secretKey);
-        System.out.println(secretId + "." + sign + "." + encodedPutPolicy);
-//
-    }
+//        JSONObject jo = new JSONObject();
+//        jo.put("timestamp", 1451491200);
+//        jo.put("version", 1);
+//        jo.put("fileId", "group1/M00/00/00/wKgFFFvhWxaAI9DGAAAkNqJrSgQ994.png");
+//        final String encodedPutPolicy = Base64.encodeBase64URLSafeString(jo.toJSONString().getBytes(StandardCharsets.UTF_8));
+//        final String sign = HmacSHA1Utils.genHmacSHA1WithEncodeBase64URLSafe(encodedPutPolicy, secretKey);
+//        System.out.println(secretId + "." + sign + "." + encodedPutPolicy);
+//    }
 
     private Parm validateToken(String token) {
         return validateToken(token, true);

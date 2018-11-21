@@ -37,6 +37,7 @@ public class OcsApplication implements CommandLineRunner {
         return factory.createMultipartConfig();
     }
 
+    @SuppressWarnings("Duplicates")
     @Bean
     public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
