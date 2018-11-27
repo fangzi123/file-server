@@ -14,7 +14,6 @@ import com.wdcloud.utils.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +40,6 @@ public class FileController {
      * @return filePath group1/M00/00/00/wKgFFFvgNp-AeYEzAAAkNqJrSgQ107.jpg
      */
     @PostMapping(value = "/upload")
-    @Transactional
     public ResponseDTO fileUpload(@RequestParam("file") MultipartFile file, @RequestParam("token") String token) throws IOException {
         String filename = file.getOriginalFilename();
         assert filename != null;
@@ -54,13 +52,12 @@ public class FileController {
         InputStream inputStream = file.getInputStream();
         StorePath storePath = storageClient.uploadFile(inputStream, file.getSize(), fileExtName, null);
         log.info(JSON.toJSONString(storePath));
-        //TODO 持久化文件数据
         FileInfo fileInfo = new FileInfo();
         fileInfo.setFileId(storePath.getFullPath());
         fileInfo.setFileSize(file.getSize());
         fileInfo.setFileType(fileExtName);
         fileInfo.setOriginName(filename);
-        fileInfoDao.save(fileInfo);//TODO 异常扩展
+        fileInfoDao.save(fileInfo);
         ConvertMQO mqo = new ConvertMQO();
         mqo.setFileId(storePath.getFullPath());
         convertSender.send(mqo);
