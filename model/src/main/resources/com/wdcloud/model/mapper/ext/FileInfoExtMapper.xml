@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wdcloud.model.mapper.ext.FileInfoExtMapper">
+
+    <update id="saveErrorMsg">
+        update oss_file_info
+        set convert_error_msg = #{errorMsg},
+            convert_status     = -1
+        where file_id = #{fileId}
+    </update>
+</mapper>

@@ -13,6 +13,10 @@
     <description>Object Convert Service</description>
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.wdcloud</groupId>
             <artifactId>model</artifactId>
             <version>${parent.version}</version>

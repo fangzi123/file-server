@@ -14,7 +14,6 @@
     <result column="convert_need" jdbcType="INTEGER" property="convertNeed" />
     <result column="convert_status" jdbcType="INTEGER" property="convertStatus" />
     <result column="convert_type" jdbcType="VARCHAR" property="convertType" />
-    <result column="convert_count" jdbcType="INTEGER" property="convertCount" />
     <result column="convert_time" jdbcType="TIMESTAMP" property="convertTime" />
     <result column="convert_result" jdbcType="VARCHAR" property="convertResult" />
     <result column="convert_error_msg" jdbcType="VARCHAR" property="convertErrorMsg" />

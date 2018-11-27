@@ -1,13 +1,9 @@
 package com.wdcloud.model.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.*;
+import lombok.*;
 
 @Builder
 @NoArgsConstructor
@@ -48,12 +44,6 @@ public class FileInfo implements Serializable {
 
     @Column(name = "convert_type")
     private String convertType;
-
-    /**
-     * 是否次数
-     */
-    @Column(name = "convert_count")
-    private Integer convertCount;
 
     @Column(name = "convert_time")
     private Date convertTime;
