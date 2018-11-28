@@ -94,10 +94,13 @@ public class FileController {
     /**
      * 文件信息
      */
-    @RequestMapping(value = "/fileInfo", method = RequestMethod.GET)
+    @GetMapping(value = "/fileInfo")
     public ResponseDTO fileInfo(@RequestParam("token") String token) {
         final Parm parm = validateToken(token);
         final FileInfo one = fileInfoDao.findOne(FileInfo.builder().fileId(parm.getFileId()).build());
+        if (one == null) {
+            return ResponseDTO.notOK(null, "无效的文件ID");
+        }
         return ResponseDTO.success(one);
     }
 
@@ -105,7 +108,7 @@ public class FileController {
     /**
      * 删除文件
      */
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @PostMapping(value = "/delete")
     public ResponseDTO delete(@RequestParam("token") String token) {
         final Parm parm = validateToken(token);
         final StorePath storePath = StorePath.praseFromUrl(parm.getFileId());
