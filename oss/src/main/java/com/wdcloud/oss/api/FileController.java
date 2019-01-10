@@ -2,6 +2,7 @@ package com.wdcloud.oss.api;
 
 import com.alibaba.fastjson.JSON;
 import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.proto.storage.DownloadFileWriter;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.wdcloud.model.dao.FileInfoDao;
 import com.wdcloud.model.entities.FileInfo;
@@ -17,8 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings({"SpringJavaInjectionPointsAutowiringInspection", "SpringJavaAutowiredFieldsWarningInspection"})
@@ -71,24 +75,24 @@ public class FileController {
      * @return
      */
 
-//    /**
-//     * 下载文件
-//     *
-//     * @param token    logo.jpg
-//     * @param response 下载流
-//     */
-//    @RequestMapping(value = "/download", method = RequestMethod.GET)
-//    public void download(@RequestParam("token") String token, HttpServletResponse response) {
-//        //文件名
-//        final Parm pathInfo = validateToken(token).invoke();
-//
-//        final String fileName = pathInfo.getName() == null ?
-//                pathInfo.getPath().substring(pathInfo.getPath().lastIndexOf(Parm.SEPARATOR) + 1) :
-//                pathInfo.getName();
-//        response.setContentType("application/force-download");
-//        response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileName, Charset.forName("utf-8")));
-//        storageClient.downloadFile(pathInfo.getGroup(), pathInfo.getPath(), new DownloadFileWriter(fileName));
-//    }
+    /**
+     * 下载文件
+     *
+     * @param token    logo.jpg
+     * @param response 下载流
+     */
+    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    public void download(@RequestParam("token") String token, @RequestParam("name") String name, HttpServletResponse response) {
+        //文件名
+        final Parm parm = validateToken(token);
+
+        final String fileName = name == null ?
+                parm.getFileId().substring(parm.getFileId().lastIndexOf("/") + 1) :
+                name;
+        response.setContentType("application/force-download");
+        response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileName, Charset.forName("utf-8")));
+        storageClient.downloadFile(parm.getFileId().substring(0, parm.getFileId().indexOf("/")), parm.getFileId().substring(parm.getFileId().indexOf("/") + 1), new DownloadFileWriter(fileName));
+    }
     ////FdfsConnectionPool.clear() 清理无效连接
 
     /**
@@ -118,7 +122,7 @@ public class FileController {
     }
 
 
-//    public static void main(String[] args) {
+    public static void main(String[] args) {
 //        /**
 //         * 签名基本原理是通过 key/secret 的实现：
 //         * 1, 服务器负责为每个客户端生成一对 key/secret （ key/secret 没有任何关系，不能相互推算），保存，并告知客户端。
@@ -141,7 +145,10 @@ public class FileController {
 //        final String encodedPutPolicy = Base64.encodeBase64URLSafeString(jo.toJSONString().getBytes(StandardCharsets.UTF_8));
 //        final String sign = HmacSHA1Utils.genHmacSHA1WithEncodeBase64URLSafe(encodedPutPolicy, secretKey);
 //        System.out.println(secretId + "." + sign + "." + encodedPutPolicy);
-//    }
+//        String name = "group1/M00/00/00/wKgFFFvhWxaAI9DGAAAkNqJrSgQ994.png";
+//        System.out.println(name.substring(name.lastIndexOf("/") + 1));
+//        System.out.println(name.substring(name.indexOf("/") + 1));
+    }
 
     private Parm validateToken(String token) {
         return validateToken(token, true);
