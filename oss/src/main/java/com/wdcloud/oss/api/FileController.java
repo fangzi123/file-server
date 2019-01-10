@@ -122,7 +122,7 @@ public class FileController {
     }
 
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        /**
 //         * 签名基本原理是通过 key/secret 的实现：
 //         * 1, 服务器负责为每个客户端生成一对 key/secret （ key/secret 没有任何关系，不能相互推算），保存，并告知客户端。
@@ -148,7 +148,7 @@ public class FileController {
 //        String name = "group1/M00/00/00/wKgFFFvhWxaAI9DGAAAkNqJrSgQ994.png";
 //        System.out.println(name.substring(name.lastIndexOf("/") + 1));
 //        System.out.println(name.substring(name.indexOf("/") + 1));
-    }
+//    }
 
     private Parm validateToken(String token) {
         return validateToken(token, true);
