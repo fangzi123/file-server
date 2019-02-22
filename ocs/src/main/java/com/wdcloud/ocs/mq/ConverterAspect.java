@@ -26,11 +26,8 @@ public class ConverterAspect {
 
     @Around("mq()")
     public Object aroundAdvice(ProceedingJoinPoint pjp) {
-        System.out.println("===========around before advice");
         ConvertMQO mqo = (ConvertMQO) pjp.getArgs()[0];
-        Object retVal = exec(mqo, pjp);
-        System.out.println("===========around after advice");
-        return retVal;
+        return exec(mqo, pjp);
     }
 
     private Object exec(ConvertMQO mqo, ProceedingJoinPoint pjp) {
