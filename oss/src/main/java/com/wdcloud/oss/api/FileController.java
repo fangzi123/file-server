@@ -82,7 +82,7 @@ public class FileController {
      * @param response 下载流
      */
     @RequestMapping(value = "/download", method = RequestMethod.GET)
-    public void download(@RequestParam("token") String token, @RequestParam("name") String name, HttpServletResponse response) {
+    public void download(@RequestParam("token") String token, @RequestParam(value = "name",required = false) String name, HttpServletResponse response) {
         //文件名
         final Parm parm = validateToken(token);
 
