@@ -179,7 +179,7 @@ public class FileController {
         BufferedInputStream bis = null;
         try {
             bos = new BufferedOutputStream(outputStream);
-            bis = new BufferedInputStream(new ByteArrayInputStream(bytes));
+            bis = new BufferedInputStream(new ByteArrayInputStream(bytes), bytes.length);
             byte[] buff = new byte[2048];
             int bytesRead;
             while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
