@@ -90,7 +90,9 @@ public class FileController {
         String fileName = name == null ?
                 parm.getFileId().substring(parm.getFileId().lastIndexOf(SEPARATOR) + 1) :
                 name;
-        fileName = fileName + parm.getFileId().substring(parm.getFileId().lastIndexOf("."));
+        if (!fileName.contains(".")) {
+            fileName = fileName + parm.getFileId().substring(parm.getFileId().lastIndexOf("."));
+        }
         response.reset();
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileName, Charset.forName("utf-8")));
