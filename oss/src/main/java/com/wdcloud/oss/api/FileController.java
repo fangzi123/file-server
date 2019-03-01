@@ -13,6 +13,7 @@ import com.wdcloud.oss.model.Parm;
 import com.wdcloud.oss.mq.ConvertSender;
 import com.wdcloud.utils.HmacSHA1Utils;
 import com.wdcloud.utils.ResponseDTO;
+import com.wdcloud.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,11 +88,12 @@ public class FileController {
     public void download(@RequestParam("token") String token, @RequestParam(value = "name", required = false) String name, HttpServletResponse response) throws IOException {
         //文件名
         final Parm parm = validateToken(token);
-        String fileName = name == null ?
-                parm.getFileId().substring(parm.getFileId().lastIndexOf(SEPARATOR) + 1) :
-                name;
-        if (!fileName.contains(".")) {
-            fileName = fileName + parm.getFileId().substring(parm.getFileId().lastIndexOf("."));
+
+        String fileName;
+        if (StringUtil.isNotEmpty(name)) {
+            fileName = name + parm.getFileId().substring(parm.getFileId().lastIndexOf("."));
+        } else {
+            fileName = parm.getFileId().substring(parm.getFileId().lastIndexOf(SEPARATOR) + 1);
         }
         response.reset();
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
