@@ -2,8 +2,9 @@ package com.wdcloud.oss.api;
 
 import com.alibaba.fastjson.JSON;
 import com.github.tobato.fastdfs.domain.StorePath;
-import com.github.tobato.fastdfs.proto.storage.DownloadFileWriter;
+import com.github.tobato.fastdfs.proto.storage.DownloadByteArray;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
+import com.google.common.base.Throwables;
 import com.wdcloud.model.dao.FileInfoDao;
 import com.wdcloud.model.entities.FileInfo;
 import com.wdcloud.mq.model.ConvertMQO;
@@ -15,12 +16,12 @@ import com.wdcloud.utils.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -30,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("file")
 public class FileController {
+    public static final String SEPARATOR = "/";
     @Autowired
     private FastFileStorageClient storageClient;
     @Autowired
@@ -81,17 +83,19 @@ public class FileController {
      * @param token    logo.jpg
      * @param response 下载流
      */
-    @RequestMapping(value = "/download", method = RequestMethod.GET)
-    public void download(@RequestParam("token") String token, @RequestParam(value = "name",required = false) String name, HttpServletResponse response) {
+    @GetMapping(value = "/download")
+    public void download(@RequestParam("token") String token, @RequestParam(value = "name", required = false) String name, HttpServletResponse response) throws IOException {
         //文件名
         final Parm parm = validateToken(token);
-
-        final String fileName = name == null ?
-                parm.getFileId().substring(parm.getFileId().lastIndexOf("/") + 1) :
+        String fileName = name == null ?
+                parm.getFileId().substring(parm.getFileId().lastIndexOf(SEPARATOR) + 1) :
                 name;
-        response.setContentType("application/force-download");
+        fileName = fileName + parm.getFileId().substring(parm.getFileId().lastIndexOf("."));
+        response.reset();
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileName, Charset.forName("utf-8")));
-        storageClient.downloadFile(parm.getFileId().substring(0, parm.getFileId().indexOf("/")), parm.getFileId().substring(parm.getFileId().indexOf("/") + 1), new DownloadFileWriter(fileName));
+        byte[] bytes = storageClient.downloadFile(parm.getFileId().substring(0, parm.getFileId().indexOf(SEPARATOR)), parm.getFileId().substring(parm.getFileId().indexOf(SEPARATOR) + 1), new DownloadByteArray());
+        write(response.getOutputStream(), bytes);
     }
     ////FdfsConnectionPool.clear() 清理无效连接
 
@@ -141,13 +145,10 @@ public class FileController {
 //        JSONObject jo = new JSONObject();
 //        jo.put("timestamp", 1451491200);
 //        jo.put("version", 1);
-//        jo.put("fileId", "group1/M00/00/00/wKgFFFvhWxaAI9DGAAAkNqJrSgQ994.png");
+//        jo.put("fileId", "group1/M00/00/0C/wKgFFFx30XyAYKAkAAABkbzGGrg696.csv");
 //        final String encodedPutPolicy = Base64.encodeBase64URLSafeString(jo.toJSONString().getBytes(StandardCharsets.UTF_8));
 //        final String sign = HmacSHA1Utils.genHmacSHA1WithEncodeBase64URLSafe(encodedPutPolicy, secretKey);
 //        System.out.println(secretId + "." + sign + "." + encodedPutPolicy);
-//        String name = "group1/M00/00/00/wKgFFFvhWxaAI9DGAAAkNqJrSgQ994.png";
-//        System.out.println(name.substring(name.lastIndexOf("/") + 1));
-//        System.out.println(name.substring(name.indexOf("/") + 1));
 //    }
 
     private Parm validateToken(String token) {
@@ -166,5 +167,33 @@ public class FileController {
             throw new RuntimeException("invalid token");
         }
         return isParse ? JSON.parseObject(new String(Base64.decodeBase64(data), StandardCharsets.UTF_8), Parm.class) : null;
+    }
+
+    private void write(OutputStream outputStream, byte[] bytes) throws IOException {
+
+        BufferedOutputStream bos = null;
+        BufferedInputStream bis = null;
+        try {
+            bos = new BufferedOutputStream(outputStream);
+            bis = new BufferedInputStream(new ByteArrayInputStream(bytes));
+            byte[] buff = new byte[2048];
+            int bytesRead;
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+        } catch (Exception e) {
+            log.error("Exception={}", Throwables.getStackTraceAsString(e));
+            throw e;
+        } finally {
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+            } finally {
+                if (bos != null) {
+                    bos.close();
+                }
+            }
+        }
     }
 }
