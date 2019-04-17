@@ -48,7 +48,7 @@ public class ConverterAspect {
         if (isError) {
             final HashMap<String, Object> map = Maps.newHashMap();
             map.put("fileId", mqo.getFileId());
-            map.put("errorMsg", error.substring(0, error.length() > 4095 ? 4095 : error.length()));
+            map.put("errorMsg", error.substring(0, error.length() > 4000 ? 4000 : error.length()));
             fileInfoDao.saveErrorMsg(map);
         }
 
