@@ -17,7 +17,7 @@ create table oss_file_info
   comment '是否次数',
   convert_time      timestamp                           null,
   convert_result    varchar(512)                        null,
-  convert_error_msg varchar(512)                        null
+  convert_error_msg varchar(4096)                        null
   comment '转换异常'
 )
  comment 'oss文件信息';
