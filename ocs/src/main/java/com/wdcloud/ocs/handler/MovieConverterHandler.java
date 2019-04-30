@@ -31,11 +31,11 @@ public class MovieConverterHandler extends AbstractConverterHandler {
     public void convert(File srcFile, ConvertModel convertModel, FileInfo fileInfo) throws Exception {
 //        Map<String, String> map = Maps.newHashMap();
         //视频转换
-        String targetFilePath = "/tmp/" + UUID.randomUUID().toString() + "." + this.targetExtName();
-        ffmpegOperations.movie2Mp4(srcFile.getPath(), targetFilePath);
-        final File fileMp4 = new File(targetFilePath);
-        final StorePath mp4 = storageClient.uploadSlaveFile(convertModel.getGroup(),
-                convertModel.getPath(), new FileInputStream(fileMp4), fileMp4.length(), "_mp4", "." + this.targetExtName());
+//        String targetFilePath = "/tmp/" + UUID.randomUUID().toString() + "." + this.targetExtName();
+//        ffmpegOperations.movie2Mp4(srcFile.getPath(), targetFilePath);
+//        final File fileMp4 = new File(targetFilePath);
+//        final StorePath mp4 = storageClient.uploadSlaveFile(convertModel.getGroup(),
+//                convertModel.getPath(), new FileInputStream(fileMp4), fileMp4.length(), "_mp4", "." + this.targetExtName());
 //        map.put("movie", mp4.getFullPath());
 //        FileUtils.forceDelete(fileMp4);
 //        MovieInfo movieInfo = ffmpegOperations.getMovieProperty(srcFile.getPath());
@@ -48,11 +48,11 @@ public class MovieConverterHandler extends AbstractConverterHandler {
 //        map.put("thumbnail", thumbnail.getFullPath());
 //        FileUtils.forceDelete(fileThumbnail);
         //缩略图
-        fileInfo.setConvertStatus(1);//成功
-        fileInfo.setConvertTime(new Date());
-        fileInfo.setConvertType(this.targetExtName());
-        fileInfo.setConvertResult(mp4.getFullPath());
-        fileInfoDao.update(fileInfo);
+//        fileInfo.setConvertStatus(1);//成功
+//        fileInfo.setConvertTime(new Date());
+//        fileInfo.setConvertType(this.targetExtName());
+//        fileInfo.setConvertResult(mp4.getFullPath());
+//        fileInfoDao.update(fileInfo);
     }
 
     @Override
