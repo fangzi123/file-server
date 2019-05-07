@@ -12,6 +12,9 @@ import com.wdcloud.ocs.handler.ConverterHandlerFactory;
 import com.wdcloud.utils.BeanUtil;
 import com.wdcloud.utils.file.FileUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.Exchange;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,7 +33,7 @@ public class ConverterReceiver {
     @Autowired
     private FileInfoDao fileInfoDao;
 
-    @RabbitListener(queues = MqConstants.QUEUE_OSS_CONVERT)
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue(MqConstants.QUEUE_OSS_CONVERT),exchange = @Exchange(MqConstants.TOPIC_EXCHANGE_OSS_CONVERT))})
     public void process(ConvertMQO mqo) throws Exception {
         log.info("converter invoke");
         final ConverterHandler handler = converterHandlerFactory.bySuffixName(FileUtils.getFileSuffix(mqo.getFileId()));
