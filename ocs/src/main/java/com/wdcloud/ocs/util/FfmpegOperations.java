@@ -96,7 +96,7 @@ public class FfmpegOperations {
         List<String> command = new ArrayList<String>();
         command.add(ffmpegHome); // 添加转换工具路径
         command.add("-loglevel"); // 设定命令日志级别
-        command.add("error"); // 设定命令日志级别
+        command.add("debug"); // 设定命令日志级别
         command.add("-y"); // 添加参数＂-y＂，该参数指定将覆盖已存在的文件
         command.add("-t"); // 截取1毫秒
         command.add("0.001"); // 截取1毫秒
