@@ -68,9 +68,4 @@ public class MovieConverterHandler extends AbstractConverterHandler {
         return "mp4";
     }
 
-    public static void main(String[] args) throws IOException {
-        final File fileMp4 = File.createTempFile(UUID.randomUUID().toString(), ".mp4");
-        System.out.println(fileMp4.getPath());
-    }
-
 }
