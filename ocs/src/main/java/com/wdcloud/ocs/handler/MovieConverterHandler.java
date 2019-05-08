@@ -35,10 +35,11 @@ public class MovieConverterHandler extends AbstractConverterHandler {
     public void convert(File srcFile, ConvertModel convertModel, FileInfo fileInfo) throws Exception {
         Map<String, String> map = Maps.newHashMap();
         //视频转换
-        final File targetFile = File.createTempFile(UUID.randomUUID().toString(), "." + this.targetExtName());
-        ffmpegOperations.movie2Mp4(srcFile.getPath(), targetFile.getPath());
+        final String targetFilePath = UUID.randomUUID().toString()+"." + this.targetExtName();
+        ffmpegOperations.movie2Mp4(srcFile.getPath(), targetFilePath);
+        final File targetFile = new File(targetFilePath);
         final StorePath mp4 = storageClient.uploadSlaveFile(convertModel.getGroup(),
-                convertModel.getPath(), new FileInputStream(targetFile), targetFile.length(), "_mp4", "." + this.targetExtName());
+                convertModel.getPath(), new FileInputStream(targetFilePath), targetFile.length(), "_mp4", "." + this.targetExtName());
         map.put("movie", mp4.getFullPath());
 //        FileUtils.forceDelete(targetFile);
 //        MovieInfo movieInfo = ffmpegOperations.getMovieProperty(srcFile.getPath());
