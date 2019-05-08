@@ -35,7 +35,7 @@ public class MovieConverterHandler extends AbstractConverterHandler {
     public void convert(File srcFile, ConvertModel convertModel, FileInfo fileInfo) throws Exception {
         Map<String, String> map = Maps.newHashMap();
         //视频转换
-        final String targetFilePath = UUID.randomUUID().toString()+"." + this.targetExtName();
+        final String targetFilePath = "/tmp/"+UUID.randomUUID().toString()+"." + this.targetExtName();
         ffmpegOperations.movie2Mp4(srcFile.getPath(), targetFilePath);
         final File targetFile = new File(targetFilePath);
         final StorePath mp4 = storageClient.uploadSlaveFile(convertModel.getGroup(),
