@@ -41,7 +41,7 @@ public class MovieConverterHandler extends AbstractConverterHandler {
         final StorePath mp4 = storageClient.uploadSlaveFile(convertModel.getGroup(),
                 convertModel.getPath(), new FileInputStream(targetFilePath), targetFile.length(), "_mp4", "." + this.targetExtName());
         map.put("movie", mp4.getFullPath());
-//        FileUtils.forceDelete(targetFile);
+        FileUtils.forceDelete(targetFile);
 //        MovieInfo movieInfo = ffmpegOperations.getMovieProperty(srcFile.getPath());
 //        //截图
 //        targetFilePath = "/tmp/" + UUID.randomUUID().toString().replace("-", "") + ".png";

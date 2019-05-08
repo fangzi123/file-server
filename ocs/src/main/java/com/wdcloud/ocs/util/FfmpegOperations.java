@@ -65,7 +65,7 @@ public class FfmpegOperations {
         List<String> command = new ArrayList<String>();
         command.add(ffmpegHome); // 添加转换工具路径
         command.add("-loglevel"); // 设定命令日志级别
-        command.add("debug"); // 设定命令日志级别
+        command.add("error"); // 设定命令日志级别
         command.add("-y"); // 添加参数＂-y＂，该参数指定将覆盖已存在的文件
         command.add("-i"); // 添加参数＂-i＂，该参数指定要转换的文件
         command.add(input); // 添加要转换格式的视频文件的路径
