@@ -55,7 +55,7 @@ public class ConverterReceiver {
         try {
             org.apache.commons.io.FileUtils.forceDelete(srcFile);
         } catch (IOException e) {
-            //
+
         }
         log.info("converter end");
     }
