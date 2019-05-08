@@ -49,11 +49,11 @@ public class ConverterReceiver {
                 new DownloadFileWriter("/tmp/" + storePath.getPath().substring(storePath.getPath().lastIndexOf("/") + 1)));
         File srcFile = new File(srcFilePath);
         handler.convert(srcFile, convertModel, fileInfo);
-        try {
-            org.apache.commons.io.FileUtils.forceDelete(srcFile);
-        } catch (IOException e) {
+//        try {
+//            org.apache.commons.io.FileUtils.forceDelete(srcFile);
+//        } catch (IOException e) {
             //
-        }
+//        }
         log.info("converter end");
     }
 }
