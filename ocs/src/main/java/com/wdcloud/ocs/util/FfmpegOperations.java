@@ -70,9 +70,9 @@ public class FfmpegOperations {
         command.add("-i"); // 添加参数＂-i＂，该参数指定要转换的文件
         command.add(input); // 添加要转换格式的视频文件的路径
         command.add("-c:v"); // 设置视频编码
-        command.add("libx264"); // 设置视频编码
+        command.add("copy"); // 设置视频编码
         command.add("-c:a"); // 设置音频编码
-        command.add("aac"); // 设置音频编码
+        command.add("copy"); // 设置音频编码
         command.add("-metadata"); // 设置元信息标题
         command.add("title=\"wdcloud.video\"");
         command.add("-metadata"); // 设置元信息内容
