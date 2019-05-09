@@ -33,7 +33,7 @@ public class ConverterReceiver {
     @Autowired
     private FileInfoDao fileInfoDao;
 
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue(MqConstants.QUEUE_OSS_CONVERT),exchange = @Exchange(MqConstants.TOPIC_EXCHANGE_OSS_CONVERT))})
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue(MqConstants.QUEUE_OSS_CONVERT),exchange = @Exchange(type = "topic",value=MqConstants.TOPIC_EXCHANGE_OSS_CONVERT))})
     public void process(ConvertMQO mqo) throws Exception {
         log.info("converter invoke");
         final ConverterHandler handler = converterHandlerFactory.bySuffixName(FileUtils.getFileSuffix(mqo.getFileId()));
