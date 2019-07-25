@@ -42,6 +42,7 @@
 
         <table schema="test" tableName="oss_file_info" domainObjectName="FileInfo">
             <property name="useActualColumnNames" value="false"/>
+
             <generatedKey column="id" sqlStatement="mysql" identity="true"/>
         </table>
     </context>
