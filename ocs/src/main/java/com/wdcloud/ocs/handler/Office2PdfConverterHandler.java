@@ -20,7 +20,7 @@ import java.util.UUID;
 @Component
 public class Office2PdfConverterHandler extends AbstractConverterHandler {
     @Autowired
-    private DocumentConverter documentConverter;
+    private ConverterDocument documentConverter;
     private List<String> suffixNames = List.of(
             "doc", "docx", "DOC", "DOCX",
             "xls", "xlsx", "XLS", "XLSX",
@@ -31,7 +31,7 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
     public void convert(File srcFile, ConvertModel convertModel, FileInfo fileInfo) throws Exception {
         File targetFile = File.createTempFile(UUID.randomUUID().toString(), "." + this.targetExtName());
         try {
-            documentConverter.convert(srcFile).to(targetFile).execute();
+            documentConverter.convert(srcFile, targetFile);
             final StorePath slaveFile = storageClient.uploadSlaveFile(convertModel.getGroup(),
                     convertModel.getPath(),
                     new FileInputStream(targetFile),
