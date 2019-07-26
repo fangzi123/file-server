@@ -61,7 +61,8 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
         //1、获取fileType
         String fileType = fileSuffix;
         //2、获取colWidth
-        FileInputStream is = new FileInputStream(srcFile);
+        //FileInputStream is = new FileInputStream(srcFile);
+        BufferedInputStream is = new BufferedInputStream(new FileInputStream(srcFile));
         Workbook wb;
         if (POIFSFileSystem.hasPOIFSHeader((InputStream)is)) {
             wb = new HSSFWorkbook((InputStream)is);
