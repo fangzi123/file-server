@@ -62,7 +62,7 @@ public class ConverterDocument extends OpenOfficeDocumentConverter {
         // Paper Size
         printerDesc[1] = new PropertyValue();
         printerDesc[1].Name = "PaperSize";
-        printerDesc[1].Value = KaoqinReport;
+        printerDesc[1].Value = A3;
 
         try {
             xPrintable.setPrinter(printerDesc);
