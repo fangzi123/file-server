@@ -60,7 +60,7 @@ public class ConverterDocument extends StreamOpenOfficeDocumentConverter {
         // Paper Size
         printerDesc[1] = new PropertyValue();
         printerDesc[1].Name = "PaperSize";
-        if ("xls".equals(fileType)) {
+        if ("xls".equals(fileType) || "xlsx".equals(fileType) || "XLS".equals(fileType) || "XLSX".equals(fileType)) {
             if (colWidth <= 21000) {
                 printerDesc[1].Value = A4;
             } else if (colWidth > 21000 && colWidth <= 29700) {
