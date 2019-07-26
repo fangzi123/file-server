@@ -19,7 +19,7 @@ public class OfficeConverterConfig {
 
     @Bean
     OpenOfficeConnection openOfficeConnection() {
-        return new SocketOpenOfficeConnection();
+        return new SocketOpenOfficeConnection("192.168.5.22", 8100);
     }
 
     @Bean
