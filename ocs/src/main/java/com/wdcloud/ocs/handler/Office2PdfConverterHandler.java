@@ -36,7 +36,7 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
         File targetFile = File.createTempFile(UUID.randomUUID().toString(), "." + this.targetExtName());
         try {
             String fileSuffix = com.wdcloud.utils.file.FileUtils.getFileSuffix(fileInfo.getFileId());
-            log.debug("-----------fileSuffix-----------"+fileSuffix);
+            log.info("-----------fileSuffix-----------"+fileSuffix);
             if ("xls".equals(fileSuffix) || "xlsx".equals(fileSuffix) || "XLS".equals(fileSuffix) || "XLSX".equals(fileSuffix)) {
                 convertXlsx(srcFile, targetFile, fileSuffix);
             } else {
@@ -74,7 +74,7 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
             wb = new XSSFWorkbook((InputStream)is);
         }
         Integer colWidth = wb.getSheetAt(0).getRow(0).getPhysicalNumberOfCells();
-        log.debug("-----------fileType-----------"+fileType + "-------colWidth-------" + colWidth);
+        log.info("-----------fileType-----------"+fileType + "-------colWidth-------" + colWidth);
         //3、获取newDocumentConverter
         SocketOpenOfficeConnection connection = new SocketOpenOfficeConnection("127.0.0.1", 8100);
         ConverterDocument converterDocument = new ConverterDocument(connection, fileType, colWidth);
