@@ -1,44 +1,49 @@
 package com.wdcloud.ocs.handler;
 
-
 import com.artofsolving.jodconverter.openoffice.connection.OpenOfficeConnection;
-import com.artofsolving.jodconverter.openoffice.converter.OpenOfficeDocumentConverter;
+import com.artofsolving.jodconverter.openoffice.converter.StreamOpenOfficeDocumentConverter;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.PaperFormat;
 import com.sun.star.view.XPrintable;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Slf4j
-@Component
-public class ConverterDocument extends OpenOfficeDocumentConverter {
+public class ConverterDocument extends StreamOpenOfficeDocumentConverter {
+    private String fileType;
+    private Integer colWidth;
 
-    public ConverterDocument(OpenOfficeConnection connection) {
+    public ConverterDocument(OpenOfficeConnection connection, String fileType, Integer colWidth) {
         super(connection);
+        this.colWidth = colWidth;
+        this.fileType = fileType;
     }
 
-    public final static Size A5, A4, A3;
-    public final static Size B4, B5, B6;
+    public final static Size A4, A3, A2, A1;
+    public final static Size B4, B3, B2, B1;
     public final static Size KaoqinReport;
 
     static {
-        A5 = new Size(14800, 21000);
         A4 = new Size(21000, 29700);
         A3 = new Size(29700, 42000);
+        A2 = new Size(42000, 59400);
+        A1 = new Size(60000, 90000);
 
         B4 = new Size(25000, 35300);
-        B5 = new Size(17600, 25000);
-        B6 = new Size(12500, 17600);
+        B3 = new Size(35300, 50000);
+        B2 = new Size(50000, 70700);
+        B1 = new Size(70700, 100000);
 
-        KaoqinReport = new Size(297000, 279400);  //最大限度  宽 1600000
+        KaoqinReport = new Size(42000, 54300);
     }
 
-
-
+    /*
+     * XComponent:xCalcComponent
+     * 
+     * @seecom.artofsolving.jodconverter.openoffice.converter.
+     * AbstractOpenOfficeDocumentConverter
+     * #refreshDocument(com.sun.star.lang.XComponent)
+     */
     @Override
     protected void refreshDocument(XComponent document) {
         super.refreshDocument(document);
@@ -47,14 +52,7 @@ public class ConverterDocument extends OpenOfficeDocumentConverter {
         // change paper orientation
         // re set page size
         XPrintable xPrintable = (XPrintable) UnoRuntime.queryInterface(XPrintable.class, document);
-        PropertyValue[] printerDesc = new PropertyValue[2];
-
-        // Paper Orientation
-        //  printerDesc[0] = new PropertyValue();
-        //  printerDesc[0].Name = "PaperOrientation";
-        //  printerDesc[0].Value = PaperOrientation.PORTRAIT;
-
-        // Paper Format
+        PropertyValue[] printerDesc = new PropertyValue[3];
         printerDesc[0] = new PropertyValue();
         printerDesc[0].Name = "PaperFormat";
         printerDesc[0].Value = PaperFormat.USER;
@@ -62,8 +60,24 @@ public class ConverterDocument extends OpenOfficeDocumentConverter {
         // Paper Size
         printerDesc[1] = new PropertyValue();
         printerDesc[1].Name = "PaperSize";
-        printerDesc[1].Value = A3;
-
+        if ("xls".equals(fileType)) {
+            if (colWidth <= 21000) {
+                printerDesc[1].Value = A4;
+            } else if (colWidth > 21000 && colWidth <= 29700) {
+                printerDesc[1].Value = A3;
+            } else if (colWidth > 29700 && colWidth <= 42000) {
+                printerDesc[1].Value = A2;
+            } else if (colWidth > 42000 && colWidth <= 60000) {
+                printerDesc[1].Value = A1;
+            } else {
+                printerDesc[1].Value = A4;
+            }
+        } else {
+            printerDesc[1].Value = A4;
+        }
+        printerDesc[2] = new PropertyValue();
+        printerDesc[2].Name = "Pages";
+        printerDesc[2].Value = 2;
         try {
             xPrintable.setPrinter(printerDesc);
         } catch (Exception e) {
@@ -71,4 +85,5 @@ public class ConverterDocument extends OpenOfficeDocumentConverter {
         }
 
     }
+
 }
