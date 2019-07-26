@@ -68,7 +68,7 @@ public class ConverterDocument extends StreamOpenOfficeDocumentConverter {
             } else if (colWidth > 29700 && colWidth <= 60000) {
                 printerDesc[1].Value = A1;
             } else {
-                printerDesc[1].Value = A4;
+                printerDesc[1].Value = A3;
             }
         } else {
             printerDesc[1].Value = A4;
