@@ -34,7 +34,7 @@ public class ConverterDocument extends OpenOfficeDocumentConverter {
         B5 = new Size(17600, 25000);
         B6 = new Size(12500, 17600);
 
-        KaoqinReport = new Size(297000, 27940);  //最大限度  宽 1600000
+        KaoqinReport = new Size(297000, 279400);  //最大限度  宽 1600000
     }
 
 
