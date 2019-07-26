@@ -12,11 +12,9 @@ import com.sun.star.view.XPrintable;
 public class ConverterDocument extends StreamOpenOfficeDocumentConverter {
 
     private String fileType;
-    private Integer colWidth;
 
-    public ConverterDocument(OpenOfficeConnection connection, String fileType, Integer colWidth) {
+    public ConverterDocument(OpenOfficeConnection connection, String fileType) {
         super(connection);
-        this.colWidth = colWidth;
         this.fileType = fileType;
     }
 
