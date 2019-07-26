@@ -17,6 +17,9 @@ public class OfficeConverterConfig {
     @Autowired
     private OpenOfficeConnection connection;
 
+    private String fileType;
+    private Integer colWidth;
+
     @Bean
     OpenOfficeConnection openOfficeConnection() {
         return new SocketOpenOfficeConnection("127.0.0.1", 8100);
@@ -24,7 +27,7 @@ public class OfficeConverterConfig {
 
     @Bean
     ConverterDocument converterDocument() {
-        return new ConverterDocument(connection);
+        return new ConverterDocument(connection, fileType, colWidth);
     }
 
 
