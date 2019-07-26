@@ -10,6 +10,7 @@ import com.sun.star.view.PaperFormat;
 import com.sun.star.view.XPrintable;
 
 public class ConverterDocument extends StreamOpenOfficeDocumentConverter {
+
     private String fileType;
     private Integer colWidth;
 
@@ -61,17 +62,7 @@ public class ConverterDocument extends StreamOpenOfficeDocumentConverter {
         printerDesc[1] = new PropertyValue();
         printerDesc[1].Name = "PaperSize";
         if ("xls".equals(fileType) || "xlsx".equals(fileType) || "XLS".equals(fileType) || "XLSX".equals(fileType)) {
-            if (colWidth <= 21000) {
-                printerDesc[1].Value = A4;
-            } else if (colWidth > 21000 && colWidth <= 29700) {
-                printerDesc[1].Value = A3;
-            } else if (colWidth > 29700 && colWidth <= 42000) {
-                printerDesc[1].Value = A2;
-            } else if (colWidth > 42000 && colWidth <= 60000) {
-                printerDesc[1].Value = A1;
-            } else {
-                printerDesc[1].Value = A4;
-            }
+            printerDesc[1].Value = A3;
         } else {
             printerDesc[1].Value = A4;
         }

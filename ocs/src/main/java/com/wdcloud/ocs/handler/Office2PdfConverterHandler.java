@@ -13,6 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -24,25 +25,24 @@ import java.util.UUID;
 @Slf4j
 @Component
 public class Office2PdfConverterHandler extends AbstractConverterHandler {
-    @Autowired
-    private ConverterDocument documentConverter;
+
     private List<String> suffixNames = List.of(
             "doc", "docx", "DOC", "DOCX",
             "xls", "xlsx", "XLS", "XLSX",
             "ppt", "pptx", "PPT", "PPTX"
     );
 
+    @Value("${openoffice.url}")
+    private String url;
+    @Value("${openoffice.port}")
+    private Integer port;
+
     @Override
     public void convert(File srcFile, ConvertModel convertModel, FileInfo fileInfo) throws Exception {
         File targetFile = File.createTempFile(UUID.randomUUID().toString(), "." + this.targetExtName());
         try {
             String fileSuffix = com.wdcloud.utils.file.FileUtils.getFileSuffix(fileInfo.getFileId());
-            log.info("-----------fileSuffix-----------" + fileSuffix);
-            if ("xls".equals(fileSuffix) || "xlsx".equals(fileSuffix) || "XLS".equals(fileSuffix) || "XLSX".equals(fileSuffix)) {
-                convertXlsx(srcFile, targetFile, fileSuffix);
-            } else {
-                documentConverter.convert(srcFile, targetFile);
-            }
+            convertXlsx(srcFile, targetFile, fileSuffix);
             final StorePath slaveFile = storageClient.uploadSlaveFile(convertModel.getGroup(),
                     convertModel.getPath(),
                     new FileInputStream(targetFile),
@@ -84,9 +84,9 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
             }
         }
         wb.close();
-        log.info("-----------fileType-----------" + fileType + "-------colWidth-------" + colWidth);
+        is.close();
         //3、获取newDocumentConverter
-        SocketOpenOfficeConnection connection = new SocketOpenOfficeConnection("127.0.0.1", 8100);
+        SocketOpenOfficeConnection connection = new SocketOpenOfficeConnection(url, port);
         ConverterDocument converterDocument = new ConverterDocument(connection, fileType, colWidth);
         //4、转换
         converterDocument.convert(srcFile, targetFile);
