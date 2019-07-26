@@ -73,6 +73,7 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
             wb = new XSSFWorkbook((InputStream)is);
         }
         Integer colWidth = wb.getSheetAt(0).getRow(0).getPhysicalNumberOfCells();
+        log.debug("-----------1111111111111-----------"+fileType + "-------22222222222-------" + colWidth);
         //3、获取newDocumentConverter
         SocketOpenOfficeConnection connection = new SocketOpenOfficeConnection("127.0.0.1", 8100);
         ConverterDocument converterDocument = new ConverterDocument(connection, fileType, colWidth);
