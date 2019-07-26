@@ -63,31 +63,33 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
         //1、获取fileType
         String fileType = fileSuffix;
         //2、获取colWidth
-//        Integer colWidth = 0;
-//        BufferedInputStream is = new BufferedInputStream(new FileInputStream(srcFile));
-//        Workbook wb;
-//        if (POIFSFileSystem.hasPOIFSHeader((InputStream) is)) {
-//            wb = new HSSFWorkbook((InputStream) is);
-//        } else {
-//            if (!DocumentFactoryHelper.hasOOXMLHeader((InputStream) is)) {
-//                throw new RuntimeException("文档格式不正确!");
-//            }
-//            wb = new XSSFWorkbook((InputStream) is);
-//        }
-//        if (wb != null) {
-//            Sheet sheet = wb.getSheetAt(0);
-//            if (sheet != null) {
-//                int colNum = sheet.getRow(1).getPhysicalNumberOfCells();
-//                for (int i = 0; i < colNum; i++) {
-//                    colWidth += sheet.getColumnWidth(i);
-//                }
-//            }
-//        }
-//        wb.close();
-//        is.close();
+        Integer colWidth = 0;
+        if ("xls".equals(fileType) || "xlsx".equals(fileType) || "XLS".equals(fileType) || "XLSX".equals(fileType)) {
+            BufferedInputStream is = new BufferedInputStream(new FileInputStream(srcFile));
+            Workbook wb;
+            if (POIFSFileSystem.hasPOIFSHeader((InputStream) is)) {
+                wb = new HSSFWorkbook((InputStream) is);
+            } else {
+                if (!DocumentFactoryHelper.hasOOXMLHeader((InputStream) is)) {
+                    throw new RuntimeException("文档格式不正确!");
+                }
+                wb = new XSSFWorkbook((InputStream) is);
+            }
+            if (wb != null) {
+                Sheet sheet = wb.getSheetAt(0);
+                if (sheet != null) {
+                    int colNum = sheet.getRow(1).getPhysicalNumberOfCells();
+                    for (int i = 0; i < colNum; i++) {
+                        colWidth += sheet.getColumnWidth(i);
+                    }
+                }
+            }
+            wb.close();
+            is.close();
+        }
         //3、获取newDocumentConverter
         SocketOpenOfficeConnection connection = new SocketOpenOfficeConnection(url, port);
-        ConverterDocument converterDocument = new ConverterDocument(connection, fileType);
+        ConverterDocument converterDocument = new ConverterDocument(connection, fileType, colWidth);
         //4、转换
         converterDocument.convert(srcFile, targetFile);
     }
