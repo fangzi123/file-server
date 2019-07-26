@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.DocumentFactoryHelper;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
         File targetFile = File.createTempFile(UUID.randomUUID().toString(), "." + this.targetExtName());
         try {
             String fileSuffix = com.wdcloud.utils.file.FileUtils.getFileSuffix(fileInfo.getFileId());
-            log.info("-----------fileSuffix-----------"+fileSuffix);
+            log.info("-----------fileSuffix-----------" + fileSuffix);
             if ("xls".equals(fileSuffix) || "xlsx".equals(fileSuffix) || "XLS".equals(fileSuffix) || "XLSX".equals(fileSuffix)) {
                 convertXlsx(srcFile, targetFile, fileSuffix);
             } else {
@@ -62,19 +63,28 @@ public class Office2PdfConverterHandler extends AbstractConverterHandler {
         //1、获取fileType
         String fileType = fileSuffix;
         //2、获取colWidth
-        //FileInputStream is = new FileInputStream(srcFile);
+        Integer colWidth = 0;
         BufferedInputStream is = new BufferedInputStream(new FileInputStream(srcFile));
         Workbook wb;
-        if (POIFSFileSystem.hasPOIFSHeader((InputStream)is)) {
-            wb = new HSSFWorkbook((InputStream)is);
+        if (POIFSFileSystem.hasPOIFSHeader((InputStream) is)) {
+            wb = new HSSFWorkbook((InputStream) is);
         } else {
-            if (!DocumentFactoryHelper.hasOOXMLHeader((InputStream)is)) {
+            if (!DocumentFactoryHelper.hasOOXMLHeader((InputStream) is)) {
                 throw new RuntimeException("文档格式不正确!");
             }
-            wb = new XSSFWorkbook((InputStream)is);
+            wb = new XSSFWorkbook((InputStream) is);
         }
-        Integer colWidth = wb.getSheetAt(0).getRow(0).getPhysicalNumberOfCells();
-        log.info("-----------fileType-----------"+fileType + "-------colWidth-------" + colWidth);
+        if (wb != null) {
+            Sheet sheet = wb.getSheetAt(0);
+            if (sheet != null) {
+                int colNum = sheet.getRow(1).getPhysicalNumberOfCells();
+                for (int i = 0; i < colNum; i++) {
+                    colWidth += sheet.getColumnWidth(i);
+                }
+            }
+        }
+        wb.close();
+        log.info("-----------fileType-----------" + fileType + "-------colWidth-------" + colWidth);
         //3、获取newDocumentConverter
         SocketOpenOfficeConnection connection = new SocketOpenOfficeConnection("127.0.0.1", 8100);
         ConverterDocument converterDocument = new ConverterDocument(connection, fileType, colWidth);
